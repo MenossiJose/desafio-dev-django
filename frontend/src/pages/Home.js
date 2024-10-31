@@ -1,171 +1,260 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import AuthContext from "../contexts/AuthContext";
 import logo from "../assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const navigate = useNavigate();
+  const { user, userContact, fetchUserData, logout, createEducation, createExperience, updateUser, updateContact} = useContext(AuthContext);
 
-  // Seções de dados
   const [userData, setUserData] = useState({
-    nome: "",
-    sobrenome: "",
-    dataNascimento: "",
-    genero: "",
-    email: ""
+    first_name: user?.first_name || "",
+    last_name: user?.last_name || "",
+    birth_date: user?.birth_date || "",
+    gender: user?.gender || "",
+    email: user?.email || "",
   });
 
   const [contactData, setContactData] = useState({
-    telefone: "",
-    endereco: "",
-    cep: ""
+    phone: "",
+    adress: "",
+    cep: "",
   });
 
-  const [educationFields, setEducationFields] = useState([
-    { universidade: "", formacao: "", duracao: "" }
-  ]);
+  const [educationData, setEducationData] = useState({
+    institution: "",
+    title: "",
+    duration: "",
+  });
 
-  const [experienceFields, setExperienceFields] = useState([
-    { empresa: "", cargo: "", descricao: "" }
-  ]);
+  const [experienceData, setExperienceData] = useState({
+    company: "",
+    role: "",
+    description: "",
+  });
 
-  // Handlers para campos de usuário
-  const handleUserChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        birth_date: user.birth_date,
+        gender: user.gender,
+        email: user.email,
+      });
+    }
+    if (userContact && userContact.length > 0) {
+      const { phone, adress, cep } = userContact[0];
+      setContactData({ phone, adress, cep });
+    }
+  }, [user, userContact]);
+
+  const formatDate = (date) => {
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
   };
 
-  // Handlers para campos de contato
-  const handleContactChange = (e) => {
-    setContactData({ ...contactData, [e.target.name]: e.target.value });
-  };
+  const handleUserChange = (e) => setUserData({ ...userData, [e.target.name]: e.target.value });
+  const handleContactChange = (e) => setContactData({ ...contactData, [e.target.name]: e.target.value });
+  const handleEducationChange = (e) => setEducationData({ ...educationData, [e.target.name]: e.target.value });
+  const handleExperienceChange = (e) => setExperienceData({ ...experienceData, [e.target.name]: e.target.value });
 
-  // Adicionar e remover campos dinâmicos de formação
-  const handleAddEducation = () => {
-    setEducationFields([...educationFields, { universidade: "", formacao: "", duracao: "" }]);
-  };
-
-  const handleRemoveEducation = (index) => {
-    const updatedFields = [...educationFields];
-    updatedFields.splice(index, 1);
-    setEducationFields(updatedFields);
-  };
-
-  // Adicionar e remover campos dinâmicos de experiência
-  const handleAddExperience = () => {
-    setExperienceFields([...experienceFields, { empresa: "", cargo: "", descricao: "" }]);
-  };
-
-  const handleRemoveExperience = (index) => {
-    const updatedFields = [...experienceFields];
-    updatedFields.splice(index, 1);
-    setExperienceFields(updatedFields);
-  };
-
-  // Handler para enviar dados ao servidor
-  const handleSubmit = async (e) => {
+  const handleUserSubmit = (e) => {
     e.preventDefault();
-    
-    // Exemplo de requisições separadas para cada app Django
-    try {
-      // Envio dos dados de usuário
-      await fetch("/api/usuario/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData)
-      });
+    const formattedUserData = {
+      ...userData,
+      birth_date: formatDate(userData.birth_date),
+    };
+    updateUser(formattedUserData);
+  };
 
-      // Envio dos dados de contato
-      await fetch("/api/contato/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(contactData)
-      });
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
 
-      // Envio das formações
-      await fetch("/api/formacao/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(educationFields)
-      });
-
-      // Envio das experiências
-      await fetch("/api/experiencia/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(experienceFields)
-      });
-
-      alert("Dados enviados com sucesso!");
-      navigate("/dashboard"); // Redirecionar após o envio
-
-    } catch (error) {
-      console.error("Erro ao enviar dados:", error);
-      alert("Ocorreu um erro ao enviar os dados.");
+    if (userContact && userContact[0]?.id) {
+      updateContact(userContact[0].id, contactData);
+      console.log(contactData);
     }
   };
 
+  const handleEducationSubmit = (e) => {
+    e.preventDefault();
+    createEducation(educationData);
+  };
+
+  const handleExperienceSubmit = (e) => {
+    e.preventDefault();
+    createExperience(experienceData);
+  };
+
+
   return (
-    <div className=" font-adlam text-2xl flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="font-adlam text-2xl flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-5xl">
         <img src={logo} alt="PEGHO logo" className="mx-auto w-1/6 h-auto rounded-lg" />
-        
-        <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-4">
-          {/* Dados Pessoais */}
-          <div>
-            <h2 className="text-pink-600 font-bold mb-4">Dados Pessoais</h2>
-            <input type="text" name="nome" placeholder="Nome" onChange={handleUserChange} className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-            <input type="text" name="sobrenome" placeholder="Sobrenome" onChange={handleUserChange} className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-            <input type="date" name="dataNascimento" onChange={handleUserChange} className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-            <select name="genero" onChange={handleUserChange} className="w-full bg-gray-100 rounded-md p-2 mb-4">
-              <option value="" disabled>Selecione o gênero</option>
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-              <option value="outro">Outro</option>
-            </select>
-            <input type="email" name="email" placeholder="Email" onChange={handleUserChange} className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-          </div>
 
-          {/* Contatos */}
-          <div>
-            <h2 className="text-pink-600 font-bold mb-4">Contatos</h2>
-            <input type="tel" name="telefone" placeholder="Telefone" onChange={handleContactChange} className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-            <input type="text" name="endereco" placeholder="Endereço" onChange={handleContactChange} className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-            <input type="text" name="cep" placeholder="CEP" onChange={handleContactChange} className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-          </div>
+        {/* Dados Pessoais */}
+        <form onSubmit={handleUserSubmit} className="mb-8">
+          <h2 className="text-pink-600 font-bold mb-4">Dados Pessoais</h2>
+          <input
+            type="text"
+            name="first_name"
+            placeholder="Nome"
+            value={userData.first_name}
+            onChange={handleUserChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="text"
+            name="last_name"
+            placeholder="Sobrenome"
+            value={userData.last_name}
+            onChange={handleUserChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="date"
+            name="birth_date"
+            value={userData.birth_date}
+            onChange={handleUserChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <select
+            name="gender"
+            value={userData.gender}
+            onChange={handleUserChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          >
+            <option value="" disabled>
+              Selecione o gênero
+            </option>
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+            <option value="outro">Outro</option>
+          </select>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={userData.email}
+            onChange={handleUserChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-sky-700 text-white py-2 px-6 rounded-md shadow-md"
+          >
+            Alterar Dados Pessoais
+          </button>
+        </form>
 
-          {/* Formação */}
-          <div>
-            <h2 className="text-pink-600 font-bold mb-4">Formação</h2>
-            {educationFields.map((field, index) => (
-              <div key={index} className="mb-4">
-                <input type="text" placeholder="Universidade" className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-                <input type="text" placeholder="Formação" className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-                <input type="text" placeholder="Duração" className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-                <button type="button" onClick={() => handleRemoveEducation(index)} className="text-red-500 font-bold text-lg">Remover Formação</button>
-              </div>
-            ))}
-            <button type="button" onClick={handleAddEducation} className="text-blue-500 font-bold text-lg">Adicionar Formação</button>
-          </div>
+        {/* Contatos */}
+        <form onSubmit={handleContactSubmit} className="mb-8">
+          <h2 className="text-pink-600 font-bold mb-4">Contatos</h2>
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Telefone"
+            value={contactData.phone}
+            onChange={handleContactChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="text"
+            name="adress"
+            placeholder="Endereço"
+            value={contactData.adress}
+            onChange={handleContactChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="text"
+            name="cep"
+            placeholder="CEP"
+            value={contactData.cep}
+            onChange={handleContactChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-sky-700 text-white py-2 px-6 rounded-md shadow-md"
+          >
+            Alterar Contatos
+          </button>
+        </form>
 
-          {/* Experiência Profissional */}
-          <div>
-            <h2 className="text-pink-600 font-bold mb-4">Experiência Profissional</h2>
-            {experienceFields.map((field, index) => (
-              <div key={index} className="mb-4">
-                <input type="text" placeholder="Empresa" className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-                <input type="text" placeholder="Cargo" className="w-full bg-gray-100 rounded-md p-2 mb-4" />
-                <textarea placeholder="Descrição" className="w-full bg-gray-100 rounded-md p-2 mb-4"></textarea>
-                <button type="button" onClick={() => handleRemoveExperience(index)} className="text-red-500 font-bold text-lg">Remover Experiência</button>
-              </div>
-            ))}
-            <button type="button" onClick={handleAddExperience} className="text-blue-500 font-bold text-lg">Adicionar Experiência</button>
-          </div>
+        {/* Formação */}
+        <form onSubmit={handleEducationSubmit} className="mb-8">
+          <h2 className="text-pink-600 font-bold mb-4">Formação</h2>
+          <input
+            type="text"
+            name="institution"
+            placeholder="Instituição"
+            onChange={handleEducationChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="text"
+            name="title"
+            placeholder="Formação"
+            onChange={handleEducationChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="number"
+            name="duration"
+            placeholder="Duração"
+            onChange={handleEducationChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-sky-700 text-white py-2 px-6 rounded-md shadow-md"
+          >
+            Adicionar Formação
+          </button>
+        </form>
 
-          {/* Botão Enviar */}
-          <div className="col-span-3 flex justify-end">
-            <button type="submit" className="bg-blue-500 hover:bg-sky-700 text-white py-2 px-6 rounded-md shadow-md">ENVIAR</button>
-          </div>
+        {/* Experiência Profissional */}
+        <form onSubmit={handleExperienceSubmit} className="mb-8">
+          <h2 className="text-pink-600 font-bold mb-4">Experiência</h2>
+          <input
+            type="text"
+            name="company"
+            placeholder="Empresa"
+            onChange={handleExperienceChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="text"
+            name="role"
+            placeholder="Cargo"
+            onChange={handleExperienceChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <input
+            type="text"
+            name="description"
+            placeholder="Descrição"
+            onChange={handleExperienceChange}
+            className="w-full bg-gray-100 rounded-md p-2 mb-4"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-sky-700 text-white py-2 px-6 rounded-md shadow-md"
+          >
+            Adicionar Experiência
+          </button>
         </form>
       </div>
+      <button
+          onClick={logout}
+          className="absolute top-4 right-4 bg-red-500 hover:bg-red-700 text-white py-2 px-6 rounded-md shadow-md"
+        >
+          Logout
+        </button>
     </div>
   );
 };
