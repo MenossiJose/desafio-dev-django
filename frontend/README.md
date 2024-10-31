@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# Frontend - ReactJS com Tailwind CSS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto é o frontend da aplicação, desenvolvido em **ReactJS** com **Tailwind CSS** para a estilização. Ele é responsável pela interface com o usuário e interage com o backend através de uma API.
 
-## Available Scripts
+## Estrutura do Projeto
 
-In the project directory, you can run:
+A estrutura de pastas do projeto está organizada da seguinte forma:
+frontend  
+├── .vscode/  
+├── node_modules/  
+├── public/  
+├── src/  
+│   ├── assets/  
+│   │   ├── fonts/  
+│   │   └── images/  
+│   ├── contexts/  
+│   │   └── AuthContext.js  
+│   ├── pages/  
+│   │   ├── Contatos.js  
+│   │   ├── Home.js  
+│   │   ├── Login.js  
+│   │   └── Registro.js  
+│   ├── services/  
+│   │   └── api.js  
+│   ├── App.test.js  
+│   ├── index.css  
+│   ├── index.js  
+│   ├── reportWebVitals.js  
+│   └── setupTests.js  
+├── Dockerfile  
+├── package-lock.json  
+├── package.json  
+├── README.md  
+└── tailwind.config.js  
 
-### `npm start`
+### Descrição das Pastas e Arquivos Principais
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **src/assets**: Contém arquivos estáticos, como imagens e fontes.
+- **src/contexts**: Contém os contextos de autenticação, como `AuthContext.js`.
+- **src/pages**: Contém as páginas principais da aplicação:
+  - `Home.js`: Página inicial.
+  - `Contatos.js`: Página de contatos.
+  - `Login.js`: Página de login.
+  - `Registro.js`: Página de registro de novos usuários.
+- **src/services**: Contém os serviços para comunicação com a API, como `api.js`.
+- **tailwind.config.js**: Arquivo de configuração do Tailwind CSS.
+- **Dockerfile**: Configuração para containerização da aplicação.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tecnologias Utilizadas
 
-### `npm test`
+- **ReactJS**: Biblioteca JavaScript para criação de interfaces de usuário.
+- **Tailwind CSS**: Framework CSS utilitário para estilização.
+- **Docker**: Usado para containerizar a aplicação.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Configuração e Execução
 
-### `npm run build`
+### Pré-requisitos
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Node.js**: Certifique-se de ter o Node.js instalado. [Instruções de instalação](https://nodejs.org/).
+- **Docker** (opcional): Se desejar executar a aplicação em um container Docker, instale o Docker. [Instruções de instalação](https://docs.docker.com/get-docker/).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Instalação
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+No terminal, navegue até o diretório `frontend/` e execute:
 
-### `npm run eject`
+```bash
+npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+### Executando o Projeto
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Para iniciar o servidor de desenvolvimento, execute:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+A aplicação estará disponível em http://localhost:3000.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Executando com Docker
 
-## Learn More
+```bash
+docker-compose up --build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+O frontend está conectado no docker-compose.yml, então irá subir junto com demais imagens.
