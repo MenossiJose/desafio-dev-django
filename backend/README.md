@@ -24,8 +24,8 @@ O repositório está organizado da seguinte forma:
     DEBUG=True
     ALLOWED_HOSTS=127.0.0.1,localhost
     POSTGRES_DB_NAME=phego_db
-    POSTGRES_USER=postgres
-    POSTGRES_PASSWORD=admin
+    POSTGRES_USER=<seu_nome_de_usuario_aqui>
+    POSTGRES_PASSWORD=<sua_senha_aqui>
     POSTGRES_HOST=db
     POSTGRES_PORT=5432
     ```
@@ -38,3 +38,45 @@ No terminal, navegue até o diretório `back-end/` e execute o seguinte comando 
 
 ```bash
 docker-compose up --build
+```
+### Esse comando irá:
+
+Construir o container do backend Django.
+Subir o container do banco de dados PostgreSQL.
+Rodar as migrações automaticamente.
+Após a inicialização, o backend estará disponível em http://localhost:8000.
+
+Rotas da API
+Abaixo estão as principais rotas disponíveis na API:
+| Rota             | Método | Descrição                        |
+|------------------|--------|----------------------------------|
+| `/api/token`     | POST   | Realiza login e gera token JWT. |
+| `/api/users`     | GET    | Lista todos os usuários.        |
+| `/api/users`     | POST   | Cria um novo usuário.           |
+| `/api/contacts`  | GET    | Lista todos os contatos.        |
+| `/api/contacts`  | POST   | Cria um novo contato.           |
+| `/api/experience`| GET    | Lista todas as experiências.    |
+| `/api/experience`| POST   | Cria uma nova experiência.      |
+| `/api/education` | GET    | Lista todas as formações.       |
+| `/api/education` | POST   | Cria uma nova formação.         |
+
+### Autenticação
+Esta API usa autenticação JWT para proteger as rotas. Para acessar as rotas protegidas, siga os passos:
+
+Obtenha um token JWT enviando uma solicitação POST para /api/token com as credenciais do usuário.
+
+Inclua o token no cabeçalho Authorization em todas as solicitações subsequentes, usando o formato:
+
+Authorization: Bearer <seu_token_jwt>
+
+### Comandos Úteis
+Para aplicar migrações manualmente:
+docker-compose run djangoapp python manage.py migrate
+
+Para acessar o shell do Django:
+docker-compose run djangoapp python manage.py shell
+
+Para criar um superusuário:
+docker-compose run djangoapp python manage.py createsuperuser
+
+
