@@ -1,48 +1,21 @@
+# Desafio Dev Django - Frontend e Backend
 
-# Desafio Técnico - Desenvolvedor Django
+Este repositório contém dois projetos principais: um back-end (API) desenvolvido em Django e Django REST Framework, e um front-end desenvolvido em React.
 
-A empresa **Pegho**, especializada em recrutamento e seleção, está crescendo rapidamente e percebeu a necessidade de um sistema que centralize as informações de seus candidatos. Para resolver esse desafio, a Pegho contratou a nossa consultoria para desenvolver um sistema que facilite o processo de contratação, permitindo que os candidatos enviem suas informações de currículo de forma organizada.
+## Estrutura do Repositório
 
-Seu desafio será desenvolver esse **sistema de recrutamento**, onde os candidatos poderão submeter informações como dados pessoais, contatos, experiência profissional e formação acadêmica. O sistema será usado pela equipe de recrutamento da Pegho para avaliar os candidatos de maneira mais eficiente.
+- **back-end/**: Contém a API construída com Django e Django REST Framework.
+- **front-end/**: Contém a aplicação React construída com Vite.
 
-O objetivo principal é avaliar suas habilidades de desenvolvimento backend com Django, mas também observar a implementação de um frontend funcional. Você pode desenvolver o frontend em Django puro ou utilizar frameworks como ReactJS, VueJS, Angular ou outro de sua preferência. A estilização do frontend não é o foco, mas será um diferencial caso seja feita.
+## Pré-requisitos
 
-## Requisitos:
-1. **Backend**:
-    - Implementar uma API ou interface em Django para gerenciar os currículos.
-    - Modelos de banco de dados para:
-        - Dados pessoais (nome, data de nascimento, etc.).
-        - Contato (email, telefone, endereço, etc.).
-        - Experiência profissional (cargo, empresa, período, descrição).
-        - Formação acadêmica (instituição, curso, período).
-    - CRUD completo para essas informações.
-    - Validações básicas dos dados (como formato de email, números de telefone, etc.).
-    - **Criação do Django Admin** para gerenciamento dos dados cadastrados.
+- Docker e Docker Compose instalados
+- Node.js e npm (opcional, caso prefira rodar o front-end fora do Docker)
 
-2. **Frontend**:
-    - Pode ser feito em Django com templates ou em algum framework JS (React, Vue, Angular, etc.).
-    - Deve permitir que o usuário preencha e envie o currículo.
-    - Não há necessidade de estilização complexa, apenas funcionalidade.
+## Configuração
 
-3. **Extras (opcionais, mas valorizados)**:
-    - Utilizar Django Rest Framework (DRF) para criar uma API REST.
-    - Utilização de Docker para containerização da aplicação.
-    - Implementar uma autenticação simples para proteger o sistema.
-    - Estilização básica no frontend com Bootstrap, TailwindCSS ou qualquer outro framework CSS.
+### 1. Clonar o repositório
 
-4. **Diferenciais (não obrigatórios, mas valorizados)**:
-    - Implementação de **testes unitários** no backend.
-    - Implementação de **BDD (Behavior-Driven Development)** para o backend usando ferramentas como Behave ou Pytest-BDD.
-
-## Entrega:
-- Enviar o código em um repositório no GitHub ou outra plataforma de sua escolha através do e-mail: vagas@digitalsys.com.br
-- Incluir um arquivo README com as instruções de instalação e execução do projeto.
-- ** Prazo Final para recebimento dos desafios **: 31/10/2024
-
-## Tutoriais recomendados:
-- **Django**: [Django - Tutorial oficial](https://docs.djangoproject.com/en/stable/intro/tutorial01/)
-- **Django Rest Framework (DRF)**: [DRF - Tutorial oficial](https://www.django-rest-framework.org/tutorial/quickstart/)
-- **ReactJS**: [React - Documentação oficial](https://reactjs.org/tutorial/tutorial.html)
-- **VueJS**: [Vue.js - Guia oficial](https://vuejs.org/guide/essentials/application.html)
-- **Angular**: [Angular - Início rápido](https://angular.io/start)
-- **Docker**: [Docker - Documentação oficial](https://docs.docker.com/get-started/)
+```bash
+git clone <URL_DO_REPOSITORIO>
+cd <PASTA_DO_REPOSITORIO>
