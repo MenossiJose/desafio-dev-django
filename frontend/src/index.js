@@ -1,20 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
-import './index.css';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Registro from './pages/Registro';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./index.css";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Registro from "./pages/Registro";
+import Contatos from "./pages/Contatos";
+import reportWebVitals from "./reportWebVitals";
+import { AuthProvider } from "./contexts/AuthContext"; // Import AuthProvider
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Router>
-    <Routes>
-     <Route path="/" element={<Login />} />
-     <Route path="/Registro" element={<Registro />} />
-     <Route path="/Home" element={<Home />} />
-     </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/Registro" element={<Registro />} />
+        <Route path="/Contatos" element={<Contatos />} />
+        <Route path="/Home" element={<Home />} />
+      </Routes>
+    </AuthProvider>
   </Router>
 );
 
