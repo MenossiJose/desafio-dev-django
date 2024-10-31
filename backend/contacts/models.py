@@ -4,6 +4,6 @@ from django.db import models
 class Contacts(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name='contacts')
     phone = models.CharField(max_length=20)
-    adress = models.TextField()
+    adress = models.CharField()
     cep = models.IntegerField()
 

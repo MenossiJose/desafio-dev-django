@@ -4,7 +4,7 @@ from .models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-
+    model = User
     list_display = ('id', 'username',  'first_name', 'last_name', 'email', 'is_superuser',)
 
     fieldsets = (
@@ -20,3 +20,4 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('email', 'username', 'first_name', 'last_name')
     ordering = ('email',)
+

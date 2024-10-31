@@ -19,8 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
                 )
         ],
     )
-    password = serializers.CharField(write_only=True)
     birth_date = serializers.DateField(input_formats=['%d/%m/%Y'])
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
