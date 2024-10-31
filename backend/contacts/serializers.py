@@ -15,8 +15,8 @@ class ContactsSerializer(serializers.ModelSerializer):
     
     def validate(self, data):
         user = self.context['request'].user
-
-        if Contacts.objects.filter(user=user).exists():
+        # Só verificar se já existe um contato se for uma criação
+        if self.instance is None and Contacts.objects.filter(user=user).exists():
             raise serializers.ValidationError("This user can't add more contacts.")
         
         return data
