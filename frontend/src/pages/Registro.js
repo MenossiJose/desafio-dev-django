@@ -1,138 +1,169 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import logo from "../assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
+import AuthContext from "../contexts/AuthContext";
 
 const Registro = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [gender, setGender] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  //const [error, setError] = useState("");
-  //const [success, setSuccess] = useState("");
+  const { register, error } = useContext(AuthContext);
+  const [formData, setFormData] = useState({
+    "username": "",
+    "first_name": "",
+    "last_name": "", 
+    "email": "",
+    "birth_date": null,
+    "gender": "",           
+    "password": ""
+  });
 
-  //const navigate = useNavigate();
   const handleChange = (event) => {
-    setGender(event.target.value);
+    setFormData({
+      ...formData,
+      gender: event.target.value, 
+    });
   };
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
 
+    const formattedData = {
+      ...formData,
+      birth_date: formatDate(formData.birth_date),
+    };
+
+    register(formattedData);
+    console.log(formattedData);
   };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; 
+    const [year, month, day] = dateString.split("-"); 
+    return `${day}/${month}/${year}`; 
+  };
+
 
   return (
-    <div className="font-adlam text-2xl flex justify-center items-center min-h-screen bg-gray-200">
-      <div className="w-full max-w-5xl">
+    <div className="font-adlam text-xl flex justify-center items-center min-h-screen bg-gray-200">
+      <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg">
         <img
           src={logo}
           alt="PEGHO logo"
-          className="mx-auto w-1/6 h-auto rounded-lg"
+          className="mx-auto w-1/4 h-auto rounded-lg"
         />
-
         {/* Formulário de dados comuns */}
-        <div className="flex flex-col items-center mt-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center mt-6 space-y-6"
+        >
           {/* Username */}
-          <div className="mb-4 w-1/3">
-            <label className="block text-blue-500">Username</label>
+          <div className="w-2/4 mx-auto">
+            <label className="block text-blue-500 mb-2">Username</label>
             <input
               type="text"
-              className="w-full bg-gray-100 rounded-md p-2 text-center"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              className="w-full bg-gray-100 rounded-md p-3"
+              value={formData.username}
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
               required
             />
           </div>
           {/* First Name */}
-          <div className="mb-4 w-1/3">
-            <label className="block text-blue-500">Nome</label>
+          <div className="w-2/4 mx-auto">
+            <label className="block text-blue-500 mb-2">Nome</label>
             <input
               type="text"
-              className="w-full bg-gray-100 rounded-md p-2 text-center"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full bg-gray-100 rounded-md p-3"
+              value={formData.first_name}
+              onChange={(e) =>
+                setFormData({ ...formData, first_name: e.target.value })
+              }
               required
             />
           </div>
           {/* Last Name */}
-          <div className="mb-4 w-1/3">
-            <label className="block text-blue-500">Sobrenome</label>
+          <div className="w-2/4 mx-auto">
+            <label className="block text-blue-500 mb-2">Sobrenome</label>
             <input
-              type="password"
-              className="w-full bg-gray-100 rounded-md p-2 text-center"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              type="text"
+              className="w-full bg-gray-100 rounded-md p-3"
+              value={formData.last_name}
+              onChange={(e) =>
+                setFormData({ ...formData, last_name: e.target.value })
+              }
               required
             />
           </div>
-          {/*Email*/}
-          <div className="mb-4 w-1/3">
-            <label className="block text-blue-500">Email</label>
+          {/* Email */}
+          <div className="w-2/4 mx-auto">
+            <label className="block text-blue-500 mb-2">Email</label>
             <input
-              type="password"
-              className="w-full bg-gray-100 rounded-md p-2 text-center"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              className="w-full bg-gray-100 rounded-md p-3"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
             />
           </div>
-          {/*Senha*/}
-          <div className="mb-4 w-1/3">
-            <label className="block text-blue-500">Senha</label>
+          {/* Senha */}
+          <div className="w-2/4 mx-auto">
+            <label className="block text-blue-500 mb-2">Senha</label>
             <input
               type="password"
-              className="w-full bg-gray-100 rounded-md p-2 text-center"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-gray-100 rounded-md p-3"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               required
             />
           </div>
-          {/*Data de Nascimento*/}
-          <div className="mb-4 w-1/3">
-            <label className="block text-blue-500">Data de Nascimento</label>
+          {/* Data de Nascimento */}
+          <div className="w-2/4 mx-auto">
+            <label className="block text-blue-500 mb-2">
+              Data de Nascimento
+            </label>
             <input
               type="date"
-              className="w-full bg-gray-100 rounded-md p-2 text-center"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
+              className="w-full bg-gray-100 rounded-md p-3"
+              value={formData.birth_date}
+              onChange={(e) =>
+                setFormData({ ...formData, birth_date: e.target.value })
+              }
               required
             />
           </div>
-          {/*Gênero*/}
-          <div className="mb-4 w-1/3">
-            <label htmlFor="gender" className="block text-blue-500">
+          {/* Gênero */}
+          <div className="w-2/4 mx-auto">
+            <label htmlFor="gender" className="block text-blue-500 mb-2">
               Gênero
             </label>
             <select
               id="gender"
-              value={gender}
+              value={formData.gender}
               onChange={handleChange}
-              className="w-full bg-gray-100 rounded-md p-2 text-center"
+              className="w-full bg-gray-100 rounded-md p-3"
             >
               <option value="" disabled>
                 Selecione o gênero
               </option>
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-              <option value="outro">Outro</option>
+              <option value="male">Masculine</option>
+              <option value="female">Feminine</option>
+              <option value="outro">Other</option>
             </select>
           </div>
-          {/*error && <p className="text-red-500">{error}</p>*/}
-          {/*success && <p className="text-green-500">{success}</p>*/}
-        </div>
 
-        {/* Botões para cada tipo de login */}
-        <div className="flex flex-col items-center gap-4 mt-4">
-          {/* Formulário de Login Funcionário */}
-          <form onSubmit={handleSubmit} className="w-full flex justify-center">
+          {/* Submit button */}
+          <div className="w-auto mx-auto">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-sky-700 text-white py-2 px-6 rounded-md shadow-md"
+              className="w-auto bg-blue-500 hover:bg-sky-700 text-white py-2 px-4 rounded-md shadow-md"
             >
               Registra-se
             </button>
-          </form>
-        </div>
+            {error && <p className="text-red-500">{error}</p>} 
+          </div>
+        </form>
       </div>
     </div>
   );
